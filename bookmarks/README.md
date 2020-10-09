@@ -11,3 +11,16 @@ Connect to psql
 Create the database using the psql command CREATE DATABASE bookmark_manager;
 Connect to the database using the pqsl command \c bookmark_manager;
 Run the query we have saved in the file 01_create_bookmarks_table.sql
+
+Set up live database
+...
+
+Set up test database
+...
+
+
+Add new bookmarks§
+
+As a user
+so that i can find my favourite site again in the future
+I would like to add to my bookmark list

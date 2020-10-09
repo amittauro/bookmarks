@@ -4,9 +4,17 @@ require File.join(File.dirname(__FILE__), '..', 'app.rb')
 require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
-
+require_relative './database_helper'
 
 Capybara.app = BookmarkManager
+
+RSpec.configure do |config|
+  config.before(:each) do
+    clear_database
+  end
+end
+
+
 
 
 

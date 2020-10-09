@@ -1,5 +1,15 @@
-<ul>
-  <% @bookmarks.each do |bookmark| %>
-    <li><%= bookmark["url"]%></li>
-  <% end %>
-</ul>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <ul>
+      <% @bookmarks.each do |bookmark| %>
+        <li><%= bookmark %></li>
+      <% end %>
+    </ul>
+    <a href="/add_bookmark">Add bookmark</a>
+  </body>
+</html>

@@ -1,18 +1,26 @@
 require "pg"
 
 class Bookmark
-  # def self.all
-  #   [
-  #     "http://www.bbc.co.uk",
-  #     "http://www.google.com"
-  #   ]
-  # end
 
   def self.all
-    conn = PG.connect( dbname: 'bookmark_manager' )
+    if ENV['RACK_ENV'] == 'test'
+      conn = PG.connect( dbname: 'bookmark_manager_test' )
+    else
+      conn = PG.connect( dbname: 'bookmark_manager' )
+    end
     rs = conn.exec "SELECT * FROM bookmarks"
-    #
-    # rs.map do |row|
-    #   row["url"]
+    rs.map do |bookmark|
+      bookmark["url"]
     end
   end
+
+  def self.create(url)
+    if ENV['RACK_ENV'] == 'test'
+      conn = PG.connect( dbname: 'bookmark_manager_test' )
+    else
+      conn = PG.connect( dbname: 'bookmark_manager' )
+    end
+    conn.exec "INSERT INTO bookmarks(url) VALUES('#{url}')"
+  end
+
+end
