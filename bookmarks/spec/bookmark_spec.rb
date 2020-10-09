@@ -7,15 +7,27 @@ describe Bookmark do
       conn.exec "INSERT INTO bookmarks(url) VALUES('http://www.makersacademy.com'),
       ('http://www.askjeeves.com'), ('http://www.twitter.com'), ('http://www.google.com')"
       bookmarks = Bookmark.all
-      expect(bookmarks).to include("http://www.makersacademy.com")
-      expect(bookmarks).to include("http://www.askjeeves.com")
+      expect(bookmarks).to all(be_instance_of(Bookmark))
     end
   end
 
   describe '.create' do
-    it 'can add a bookmark to the database' do
-      Bookmark.create('http://www.imdb.com')
-      expect(Bookmark.all).to include('http://www.imdb.com')
+    it 'can add a bookmark and title to the database' do
+      Bookmark.create(url: 'http://www.imdb.com', title: 'IMDB')
+      expect(Bookmark).to receive(:new).with(title: 'IMDB', url: 'http://www.imdb.com')
+      Bookmark.all
+    end
+  end
+
+  describe 'instance methods' do
+    let(:bookmark) { Bookmark.new(title: 'IMDB', url: 'http://www.imdb.com') }
+    
+    it '.url returns the URL' do
+      expect(bookmark.url).to eq 'http://www.imdb.com'
+    end
+
+    it '.title returns the title' do
+      expect(bookmark.title).to eq 'IMDB'
     end
   end
 end

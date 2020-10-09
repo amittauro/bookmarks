@@ -5,6 +5,7 @@ require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
 require_relative './database_helper'
+require_relative './web_helpers'
 
 Capybara.app = BookmarkManager
 
