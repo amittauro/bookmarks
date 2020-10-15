@@ -6,6 +6,6 @@ feature 'updating bookmark' do
     fill_in 'title', with: 'IBM'
     fill_in 'url', with: 'http://www.ibm.com'
     click_button('submit')
-    expect(page).to have_content('IMDB')
+    expect(page).to have_content('IBM')
   end
 end
