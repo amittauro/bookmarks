@@ -6,6 +6,7 @@
   </head>
   <body>
     <h1>BOOKMARKS</h1>
+    <h2><%= flash[:invalid_url]%></h2>
     <ul>
       <% @bookmarks.each do |bookmark| %>
       <form class = "bookmark" action="/delete_bookmark/<%= bookmark.id %>" method="post">

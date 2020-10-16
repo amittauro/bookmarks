@@ -1,10 +1,14 @@
 require 'sinatra/base'
+require 'sinatra/flash'
+require 'uri'
 require './lib/bookmark'
 require_relative './database_setup'
+require 'pry'
 
 class BookmarkManager < Sinatra::Base
 
-  enable :method_override
+  enable :method_override, :sessions
+  register Sinatra::Flash
 
   get '/' do
     "Bookmark Manager"
@@ -20,8 +24,14 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/add_bookmark' do
-    Bookmark.create(url: params[:url], title: params[:title])
-    redirect '/bookmarks'
+    # binding.pry
+    if params[:url] =~ URI::regexp(['http', 'https'])
+      Bookmark.create(url: params[:url], title: params[:title])
+      redirect '/bookmarks'
+    else
+      flash[:invalid_url] = 'Invalid URL!'
+      redirect '/bookmarks'
+    end
   end
 
   delete '/delete_bookmark/:id' do
@@ -38,5 +48,15 @@ class BookmarkManager < Sinatra::Base
   patch '/update_bookmark/:id' do
     Bookmark.update(id: params[:id], title: params[:title], url: params[:url])
     redirect '/bookmarks'
+  end
+
+  get '/bad_bookmark' do
+    "Invalid URL!"
+  end
+
+  get '/flash-test' do
+    flash[:test] = "Hello Flashy World!"
+    # binding.pry
+    erb :'bookmarks/flash-test'
   end
 end
