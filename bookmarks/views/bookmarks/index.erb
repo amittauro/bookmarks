@@ -9,14 +9,21 @@
     <h2><%= flash[:invalid_url]%></h2>
     <ul>
       <% @bookmarks.each do |bookmark| %>
-      <form class = "bookmark" action="/delete_bookmark/<%= bookmark.id %>" method="post">
-        <li><a href="<%= bookmark.url %>"><%= bookmark.title %></a>
-          <input type="hidden" name = "_method" value="delete">
-          <input type="submit" value="delete"></li>
-      </form>
-      <form action="update_bookmark/<%= bookmark.id %>" method="get">
-        <input type="submit" value="update">
-      </form>
+        <form class = "bookmark" action="/delete_bookmark/<%= bookmark.id %>" method="post">
+          <li><a href="<%= bookmark.url %>"><%= bookmark.title %></a>
+            <input type="hidden" name = "_method" value="delete">
+            <input type="submit" value="delete"></li>
+        </form>
+        <form action="update_bookmark/<%= bookmark.id %>" method="get">
+          <input type="submit" value="update">
+        </form>
+        <form action="bookmarks/<%= bookmark.id %>/comment" method="get">
+          <input type="submit" value="Add Comment">
+        </form>
+        <p>Comments</p>
+        <% bookmark.comments.each do |comment| %>
+          <%= comment %><br>
+        <% end %>
       <% end %>
     </ul>
     <a href="/add_bookmark">Add bookmark</a>

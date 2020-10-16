@@ -16,6 +16,7 @@ class BookmarkManager < Sinatra::Base
 
   get '/bookmarks' do
     @bookmarks = Bookmark.all
+
     erb :'bookmarks/index'
   end
 
@@ -24,14 +25,9 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/add_bookmark' do
-    # binding.pry
-    if params[:url] =~ URI::regexp(['http', 'https'])
-      Bookmark.create(url: params[:url], title: params[:title])
-      redirect '/bookmarks'
-    else
-      flash[:invalid_url] = 'Invalid URL!'
-      redirect '/bookmarks'
-    end
+    flash[:invalid_url] = 'Invalid URL!' unless Bookmark.create(url: params[:url], title: params[:title])
+
+    redirect '/bookmarks'
   end
 
   delete '/delete_bookmark/:id' do
@@ -50,13 +46,14 @@ class BookmarkManager < Sinatra::Base
     redirect '/bookmarks'
   end
 
-  get '/bad_bookmark' do
-    "Invalid URL!"
+  get '/bookmarks/:id/comment' do
+    @bookmark = Bookmark.find(params[:id])
+    erb :'bookmarks/comment'
   end
 
-  get '/flash-test' do
-    flash[:test] = "Hello Flashy World!"
-    # binding.pry
-    erb :'bookmarks/flash-test'
+  post '/bookmarks/:id/comment' do
+    Comment.create(content: params[:comment], bookmark_id: params[:id])
+    # DatabaseConnection.query("INSERT INTO comments(content, bookmark_id) VALUES ('#{params[:comment]}', #{params[:id]})")
+    redirect '/bookmarks'
   end
 end

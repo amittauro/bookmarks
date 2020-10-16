@@ -18,21 +18,30 @@ class Bookmark
   end
 
   def self.create(title:, url:)
-    DatabaseConnection.query("INSERT INTO bookmarks(title,url) VALUES('#{title}','#{url}')")
+    if valid?(url)
+      DatabaseConnection.query("INSERT INTO bookmarks(title,url) VALUES('#{title}','#{url}')")
+    end
   end
 
   def self.delete(id)
     DatabaseConnection.query("DELETE FROM bookmarks WHERE id = '#{id}'")
   end
 
-  def self.update(id: ,title: ,url: )
+  def self.update(id:, title:, url:)
     DatabaseConnection.query("UPDATE bookmarks SET id = '#{id}', url = '#{url}', title = '#{title}' WHERE id = '#{id}'")
   end
 
   def self.find(id)
-    rs = DatabaseConnection.query("SELECT * FROM bookmarks WHERE id = '#{id}'")
-    rs.map do |bookmark|
-      new(title: bookmark["title"], url: bookmark["url"], id: bookmark["id"])
-    end.pop
+    bookmark = DatabaseConnection.query("SELECT * FROM bookmarks WHERE id = '#{id}'").first
+    new(title: bookmark["title"], url: bookmark["url"], id: bookmark["id"])
+  end
+
+  def self.valid?(url)
+    url =~ URI::regexp(['http', 'https'])
+  end
+
+  def comments
+    response = DatabaseConnection.query("SELECT * FROM comments WHERE bookmark_id=#{@id}")
+    response.map { |comment| comment["content"] }
   end
 end
